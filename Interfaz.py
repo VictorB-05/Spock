@@ -11,38 +11,46 @@ raiz.resizable(width=False, height=False)
 raiz.geometry('1000x600')
 
 def juego(opcion,logica):
-    numero_aleatorio = random.randint(1, 5)
-    cpu = simbolo.Simbolo(numero_aleatorio)
-    print(cpu.name)
-    rel = opcion.comparar(cpu)
-    if rel == 1:
-        resultado.set("Has ganado")
-        jugada.set(f"{opcion.name} ganan a {cpu.name}")
-        logica.ganaJ()
-    elif rel == -1:
-        resultado.set("Has perdido")
-        jugada.set(f"{cpu.name} ganan a {opcion.name}")
-        logica.ganaCpu()
+    if not logica.fin():
+        numero_aleatorio = random.randint(1, 5)
+        cpu = simbolo.Simbolo(numero_aleatorio)
+        print(cpu.name)
+        rel = opcion.comparar(cpu)
+        if rel == 1:
+            resultado.set("Has ganado")
+            jugada.set(f"{opcion.name} ganan a {cpu.name}")
+            logica.ganaJ()
+        elif rel == -1:
+            resultado.set("Has perdido")
+            jugada.set(f"{cpu.name} ganan a {opcion.name}")
+            logica.ganaCpu()
+        else:
+            resultado.set("Empate")
+            jugada.set(f"{opcion.name} y {cpu.name} es ")
+        puntuacion.set(logica)
+        if logica.fin():
+            ganar(logica)
     else:
-        resultado.set("Empate")
-        jugada.set(f"{opcion.name} y {cpu.name} es ")
-    puntuacion.set(logica)
-    if logica.fin():
-        ganar(logica)
+        jugada.set("")
+        resultado.set("FIN")
 
 def ganar(logica):
     # Crear una ventana secundaria
     nueva_ventana = tk.Toplevel(raiz)
     nueva_ventana.title("GIF Animado")
-    nueva_ventana.geometry("500x400")
+    nueva_ventana.geometry("500x500")
     framegif = Frame(nueva_ventana,bg="#00ffff")
     framegif.pack(fill="both", expand=True)
+
     if logica.ganar():
         gif_path = "resources/win.gif"
         tiempo = 24
+        rel = Label(framegif, text="Has ganado", font=("Arial",30),bg="#00ffff")
     else:
         gif_path = "resources/perder.gif"
         tiempo = 36
+        rel = Label(framegif, text="Has perdido", font=("Arial",30),bg="#00ffff")
+    rel.pack(fill="x",pady=20)
     # Cargar el GIF
     gif = Image.open(gif_path)
 
@@ -50,7 +58,7 @@ def ganar(logica):
     label = tk.Label(framegif)
 
     label = tk.Label(framegif, bg="#00ffff")
-    label.place(x=0, y=0, relwidth=1, relheight=1)
+    label.place(x=0, y=80, relwidth=1)
 
     # Función para actualizar los frames del GIF
     def actualizar_frame(index):
@@ -76,29 +84,29 @@ frame1.place(x=0,y=0)
 logica = logica()
 
 #botones para jugar
-Piedra = Button(frame1, width=12, bg="blue", text="Piedra", command=lambda : juego(simbolo.Simbolo.Piedra,logica))
+Piedra = Button(frame1, width=12, bg="blue", text="Piedra", command=lambda : juego(simbolo.Simbolo.Piedra,logica), foreground="#f5dc86",font=("Arial",10))
 Piedra.place(x=15, y= 400)
-Papel = Button(frame1, width=12,bg="blue",text="Papel" ,command=lambda : juego(simbolo.Simbolo.Papel,logica))
+Papel = Button(frame1, width=12,bg="blue",text="Papel" ,command=lambda : juego(simbolo.Simbolo.Papel,logica), foreground="#f5dc86",font=("Arial",10))
 Papel.place(x=214, y= 400)
-Tijeras = Button(frame1, width=12,bg="blue",text="Tijeras" ,command=lambda : juego(simbolo.Simbolo.Tijeras, logica))
+Tijeras = Button(frame1, width=12,bg="blue",text="Tijeras" ,command=lambda : juego(simbolo.Simbolo.Tijeras, logica), foreground="#f5dc86",font=("Arial",10))
 Tijeras.place(x=432, y= 400)
-Lagarto = Button(frame1, width=12,bg="blue",text="Lagarto" ,command=lambda : juego(simbolo.Simbolo.Lagarto, logica))
+Lagarto = Button(frame1, width=12,bg="blue",text="Lagarto" ,command=lambda : juego(simbolo.Simbolo.Lagarto, logica), foreground="#f5dc86",font=("Arial",10))
 Lagarto.place(x=650, y= 400)
-Spock = Button(frame1, width=12, bg="blue", text="Spok", command=lambda: juego(simbolo.Simbolo.Spock,logica))
+Spock = Button(frame1, width=12, bg="blue", text="Spok", command=lambda: juego(simbolo.Simbolo.Spock,logica), foreground="#f5dc86",font=("Arial",10))
 Spock.place(x=858, y= 400)
 #labels para dar resultados
 resultado = tk.StringVar()
 resultado.set("inicio")
-label1 = Label(frame1,textvariable=resultado, font=("Arial",30))
+label1 = Label(frame1,textvariable=resultado, font=("Arial",30), bg="#ffb0c8")
 
 jugada = tk.StringVar()
 jugada.set("-------------")
-ljugada = Label(frame1,textvariable=jugada, font=("Arial",20))
+ljugada = Label(frame1,textvariable=jugada, font=("Arial",20),bg="#ffb0c8")
 
 
 puntuacion = tk.StringVar()
 puntuacion.set("0-0")
-lpuntuacion = Label(frame1,textvariable=puntuacion, font=("Arial",30))
+lpuntuacion = Label(frame1,textvariable=puntuacion, font=("Arial",30),bg="#ffb0c8")
 
 label1.place(x=300,y=200,width=400)
 ljugada.place(x=300,y=170,width=400)
